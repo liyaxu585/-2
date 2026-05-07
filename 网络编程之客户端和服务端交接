@@ -1,0 +1,57 @@
+'''import socket
+server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+server.bind(('10.110.247.34',10086))
+server.listen(5)
+accept_socket,clientinfor = server.accept()
+data = accept_socket.recv(1024).decode('utf-8')
+print(f'接收到来自客户端{clientinfor}的信息{data}')
+server.send(b'hello socket')
+accept_socket.close()'''
+#服务端
+import socket
+# 参一 Adress Family,地址族,即Ipv4 也有ipv6,即AF_INET6 参二通信方式TCP 还是 UTP
+# s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# 网络编程也叫做socket通信
+# 和远方的朋友通信,看似是两个人在交流,实际上是两部手机(两个socket对象)来进行交互的
+# print(s)
+# 网编案例 客户端和服务器端交互一句话
+# 服务器开发流程
+# 1.创建socket对象  ipv4,字节流(bytes)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 2.绑定ip号和端口号
+server.bind(('10.110.247.34', 8888))
+# 3.设置最大监听数
+server.listen(5)
+# 4.等待客户端申请连接  accept返回的是一个元组,(最后一个连接客户的socket对象,连接的对象的信息)
+while True:
+    try:
+        accept_socket, clientinfor = server.accept()
+        # 5.给客户端发送信息  注意要用b来把字符串转成二进制,但是不能有中文
+        accept_socket.send(b'Welcome to socket')
+        # 6.接收客户端的信息并打印  recv这里表示的是接收最大字节为多少的信息
+        data = accept_socket.recv(1024).decode('utf-8')  # 要用接收对象来接收信息,而不是服务器对象
+        print(f'服务器端收到来自{clientinfor}的信息{data}')
+        # 7.解放资源   服务器端一般不关闭
+        accept_socket.close()
+    except:
+        pass
+        # 细节 客户端和服务器端是通过字节流的方式进行实现的
+        #补充 encode是编码 decode是解码
+        #server.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,True)
+
+
+
+
+
+
+
+#客户端
+import socket
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+client.connect(('10.110.247.34',8888))
+data = client.recv(1024).decode('utf-8')
+print(f'客户端收到服务器端的信息{data}')
+client.send(b'hello')
+client.send('Socket很好玩,我很喜欢'.encode('utf-8'))
+client.close()
+    
