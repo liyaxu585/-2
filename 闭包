@@ -1,0 +1,20 @@
+def get_sum(a,b):
+    return a+b
+print(get_sum)#打印的是对象
+print(get_sum(10,20))#调用函数,获取返回值
+#函数名可以赋值给变量,这个变量就是函数对象
+my_sum = get_sum
+print(my_sum)
+print(my_sum(10,20))
+
+#演示闭包写法
+#定义求和闭包
+def func1(num1):
+    def func2(num2):
+        sum = num1 + num2
+        print(f'求和结果{sum}')
+    return func2
+fn_outer = func1(1)
+result = fn_outer(2)#直接打印3了
+#写在一起就是
+func1(10)(20)#直接打印30,单看前面是外部函数
